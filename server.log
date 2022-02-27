@@ -1,0 +1,9 @@
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 8080","time":"2022-02-26T17:21:17-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T17:25:26-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/handler.go:25","func":"GoAutoBash/server.webhookHandler","level":"info","msg":"Hello World!","time":"2022-02-26T17:25:34-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T17:25:50-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/handler.go:25","func":"GoAutoBash/server.webhookHandler","level":"info","msg":"Hello World!","time":"2022-02-26T17:25:54-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T18:42:31-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T18:52:06-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T20:31:12-06:00"}
+{"file":"/Users/mac/Desktop/Programs/SelfDev/GoAutoBash/server/listen.go:14","func":"GoAutoBash/server.Listen","level":"info","msg":"Starting server at 0.0.0.0:8080","time":"2022-02-26T20:33:06-06:00"}
