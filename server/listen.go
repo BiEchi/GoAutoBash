@@ -10,6 +10,7 @@ func Listen(addr string) error {
 	router.LoadHTMLGlob("templates/*")
 	router.NoRoute(noRouteHandler)
 	router.GET("/ping", pingHandler)
+	router.GET("/status", statusHandler)
 	router.POST("/webhook", webhookHandler)
 	logrus.Info("Starting server at ", addr)
 	return router.Run(addr)
