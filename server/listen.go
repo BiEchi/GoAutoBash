@@ -13,7 +13,7 @@ func Listen(addr string) error {
 	router.GET("/status", statusHandler)
 
 	/* handler for the GitHub WebHook event */
-	router.POST("/webhook", webhookHandler)
+	router.POST("/", webhookHandler)
 	logrus.Info("Starting server at ", addr)
 	return router.Run(addr)
 }
