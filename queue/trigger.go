@@ -73,7 +73,7 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
-	println("The payload of the task is: ", task.Payload["ref"])
+	println("The payload of the task is: ", task.Payload.Commits[0])
 	/* dispatch other tasks to external program */
 	cmd := exec.Command("bash", "test.sh")
 	output, err := cmd.Output()
@@ -82,16 +82,15 @@ func ExecuteTask(task *Task) error {
 		return err
 	}
 	return nil
-} 
+}
 
 // TaskEnqueue enqueues a queue.Task object to the queueing system
 func TaskEnqueue(payload *github.PushPayload) error {
 	name := payload.Pusher.Name
 	Queue <- &Task{
-		Name:    	name,
-		IsManual: 	false,
-		Payload:  	payload,
+		Name:     name,
+		IsManual: false,
+		Payload:  payload,
 	}
 	return nil
 }
- 
