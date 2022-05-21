@@ -96,10 +96,8 @@ func ExecuteTask(task *Task) error {
 		return errBash
 	}
 	/* push the generated dir to another branch on GitHub */
-	println("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
-	exec.Command("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
-	println("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "branch", "report", "&&", "git", "checkout", "report", "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "origin", "report")
-	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "branch", "report", "&&", "git", "checkout", "report", "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "origin", "report")
+	cmdPush1 := exec.Command("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
+	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&& git branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report")
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
 		logrus.Error(errPush, string(outputPush))
