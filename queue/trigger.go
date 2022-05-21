@@ -74,7 +74,7 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
 	/* clone the commit to local for later use */
-	cmdClone := exec.Command("git", "clone", task.Payload.HeadCommit.URL, "biechi/"+task.Payload.HeadCommit.ID)
+	cmdClone := exec.Command("git", "clone", task.Payload.HeadCommit.URL, "biechi/")
 	outputClone, errClone := cmdClone.Output()
 	if errClone != nil {
 		logrus.Error(errClone, string(outputClone))
