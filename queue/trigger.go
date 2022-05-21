@@ -99,11 +99,11 @@ func ExecuteTask(task *Task) error {
 	/* generate a README.md */
 	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "touch", "README.md")
 	/* push the generated dir to another branch on GitHub */
-	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "branch", "report_"+task.Payload.HeadCommit.ID)
-	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "checkout", "report_"+task.Payload.HeadCommit.ID)
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "branch", "report_"+task.Payload.HeadCommit.ID[:7])
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "checkout", "report_"+task.Payload.HeadCommit.ID[:7])
 	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "add", ".")
 	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "commit", "-m", "Report Generated.")
-	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "push", "origin", "report_"+task.Payload.HeadCommit.ID)
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "push")
 
 	return nil
 }
