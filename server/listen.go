@@ -17,3 +17,4 @@ func Listen(addr string) error {
 	logrus.Info("Starting server at ", addr)
 	return router.Run(addr)
 }
+ 
