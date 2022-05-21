@@ -82,7 +82,7 @@ func ExecuteTask(task *Task) error {
 		return err
 	}
 	return nil
-}
+} 
 
 // TaskEnqueue enqueues a queue.Task object to the queueing system
 func TaskEnqueue(payload *github.PushPayload) error {
