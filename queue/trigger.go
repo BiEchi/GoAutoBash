@@ -97,6 +97,14 @@ func ExecuteTask(task *Task) error {
 	}
 	/* push the generated dir to another branch on GitHub */
 	cmdPush1 := exec.Command("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
+	outputPush1, errPush1 := cmdPush1.Output()
+	if errPush1 != nil {
+		logrus.Error(errPush1, string(outputPush1))
+		return errPush1
+	} else {
+		logrus.Info("Maked MD: ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+	}
+
 	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&& git branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report")
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
