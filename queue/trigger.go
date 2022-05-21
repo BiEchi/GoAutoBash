@@ -80,8 +80,8 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
 	} else {
-		logrus.Info("Cloned", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
-	} /**/
+		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+	}
 
 	/* dispatch other tasks to external programs */
 	cmdBash := exec.Command("bash", "test.sh")
