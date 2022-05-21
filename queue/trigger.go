@@ -97,22 +97,11 @@ func ExecuteTask(task *Task) error {
 	}
 
 	/* generate a README.md */
-	cmdTouch := exec.Command("touch", "README.md")
-	cmdTouch.Dir = "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
-	outputTouch, errTouch := cmdTouch.Output()
-	if errTouch != nil {
-		logrus.Error(errTouch, string(outputTouch))
-		return errTouch
-	}
-
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "touch", "README.md")
 	/* push the generated dir to another branch on GitHub */
-	cmdPush := exec.Command("git", "branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report_"+task.Payload.HeadCommit.ID)
-	cmdPush.Dir = "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
-	outputPush, errPush := cmdPush.Output()
-	if errPush != nil {
-		logrus.Error(errPush, string(outputPush))
-		return errPush
-	}
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "add", ".")
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "commit", "-m", "Report Generated.")
+	execCommand("repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "git", "push", "origin", "report_"+task.Payload.HeadCommit.ID)
 
 	return nil
 }
@@ -126,4 +115,11 @@ func TaskEnqueue(payload *github.PushPayload) error {
 		Payload:  payload,
 	}
 	return nil
+}
+
+/* wrapper function for exec.Command calls with dir */
+func execCommand(dir string, name string, arg ...string) ([]byte, error) {
+	cmd := exec.Command(name, arg...)
+	cmd.Dir = dir
+	return cmd.Output()
 }
