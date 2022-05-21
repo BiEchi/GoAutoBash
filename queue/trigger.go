@@ -79,6 +79,8 @@ func ExecuteTask(task *Task) error {
 	if errClone != nil {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
+	} else {
+		logrus.Info("cloned biechi/" + task.Payload.HeadCommit.ID)
 	}
 
 	/* dispatch other tasks to external programs */
