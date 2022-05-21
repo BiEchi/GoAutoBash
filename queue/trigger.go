@@ -1,7 +1,6 @@
 package queue
 
 import (
-	"github.com/sirupsen/logrus"
 	"gopkg.in/go-playground/webhooks.v5/github"
 	"os/exec"
 	"time"
@@ -80,6 +79,8 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
 	} else {
+		exec.Command("haob2")
+		exec.Command("") /* input the personal access token here! */
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
