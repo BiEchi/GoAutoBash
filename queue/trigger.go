@@ -97,8 +97,7 @@ func ExecuteTask(task *Task) error {
 	}
 	/* push the generated dir to another branch on GitHub */
 	exec.Command("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
-	println("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "-u", "origin", "report")
-	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "-u", "origin", "report")
+	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "-u", "origin", "master:report")
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
 		logrus.Error(errPush, string(outputPush))
