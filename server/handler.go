@@ -44,9 +44,9 @@ func webhookHandler(c *gin.Context) {
 	switch payload.(type) {
 	case github.PushPayload:
 		/* if the server is the pusher, return to avoid repeated triggering */
-		//if payload.(github.PushPayload).HeadCommit.Message == "Report Generated." {
-		//	return
-		//}
+		if payload.(github.PushPayload).HeadCommit.Message == "Report Generated." {
+			return
+		}
 		push := payload.(github.PushPayload)
 		if err := queue.TaskEnqueue(&push); err != nil {
 			_ = c.AbortWithError(500, err)
