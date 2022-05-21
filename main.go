@@ -23,5 +23,6 @@ func init() {
 
 func main() {
 	if err := queue.StartQueue(2, 400, time.Minute*10); err != nil { logrus.Fatal(err) }
+	/* the server listens at 0.0.0.0:8080 */
 	if err := server.Listen("0.0.0.0:8080"); err != nil { logrus.Fatal(err) }
 }
