@@ -73,6 +73,8 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
+	println("Executing task: ", task.Name)
+	/* dispatch other tasks to external program */
 	cmd := exec.Command("bash", "test.sh")
 	output, err := cmd.Output()
 	if err != nil {

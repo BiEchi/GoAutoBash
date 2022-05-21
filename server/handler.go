@@ -48,7 +48,6 @@ func webhookHandler(c *gin.Context) {
 			_ = c.AbortWithError(500, err)
 		}
 		logrus.Info("Someone has pushed to your repo!")
-		print(push)
 		c.JSON(200, gin.H{
 			"message": "OK",
 		})
