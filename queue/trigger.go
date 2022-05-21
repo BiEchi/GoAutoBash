@@ -106,7 +106,7 @@ func ExecuteTask(task *Task) error {
 	}
 
 	/* push the generated dir to another branch on GitHub */
-	cmdPush := exec.Command("git branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report_" + task.Payload.HeadCommit.ID)
+	cmdPush := exec.Command("git", "branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report_"+task.Payload.HeadCommit.ID)
 	cmdPush.Dir = "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
