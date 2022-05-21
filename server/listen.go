@@ -11,7 +11,10 @@ func Listen(addr string) error {
 	router.NoRoute(noRouteHandler)
 	router.GET("/ping", pingHandler)
 	router.GET("/status", statusHandler)
+
+	/* handler for the GitHub WebHook event */
 	router.POST("/webhook", webhookHandler)
 	logrus.Info("Starting server at ", addr)
 	return router.Run(addr)
 }
+ 
