@@ -78,7 +78,7 @@ func ExecuteTask(task *Task) error {
 	cmd := exec.Command("bash", "test.sh")
 	output, err := cmd.Output()
 	if err != nil {
-		logrus.Error(err, string(output)) /**/
+		logrus.Error(err, string(output))
 		return err
 	}
 	return nil
