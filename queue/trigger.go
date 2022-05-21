@@ -81,7 +81,7 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(err, string(output))
 		return err
 	}
-	return nil
+	return nil /**/
 }
 
 // TaskEnqueue enqueues a queue.Task object to the queueing system
