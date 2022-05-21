@@ -119,9 +119,14 @@ func TaskEnqueue(payload *github.PushPayload) error {
 	return nil
 }
 
-/* wrapper function for exec.Command calls with dir */
+/* wrapper function for exec.Command calls with dir and error check (logrus) */
 func execCommand(dir string, name string, arg ...string) ([]byte, error) {
 	cmd := exec.Command(name, arg...)
 	cmd.Dir = dir
-	return cmd.Output()
+	output, err := cmd.Output()
+	if err != nil {
+		logrus.Error(err, string(output))
+		return output, err
+	}
+	return output, nil
 }

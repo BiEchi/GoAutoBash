@@ -43,7 +43,7 @@ func webhookHandler(c *gin.Context) {
 	// append all the operations for each event below.
 	switch payload.(type) {
 	case github.PushPayload:
-		/* if the server is the pusher, return without enqueuing */
+		/* if the server is the pusher, return to avoid repeated triggering */
 		if payload.(github.PushPayload).HeadCommit.Message == "Report Generated." {
 			return
 		}
