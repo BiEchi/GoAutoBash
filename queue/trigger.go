@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"github.com/sirupsen/logrus"
 	"gopkg.in/go-playground/webhooks.v5/github"
 	"os/exec"
 	"time"
