@@ -96,8 +96,7 @@ func ExecuteTask(task *Task) error {
 		return errBash
 	}
 	/* push the generated dir to another branch on GitHub */
-	println("git", "push", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], "origin", "klc3")
-	cmdPush := exec.Command("git", "push", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], "origin", "klc3")
+	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&&", "git", "add", ".", "&&", "git", "commit", "-m", "\"Report Generated.\"", "&&", "git", "push", "-u", "origin", "report")
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
 		logrus.Error(errPush, string(outputPush))
