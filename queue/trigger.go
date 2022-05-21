@@ -3,6 +3,7 @@ package queue
 import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/go-playground/webhooks.v5/github"
+	"os"
 	"os/exec"
 	"time"
 )
@@ -74,8 +75,11 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
 	/* clone the commit to local for later use */
-	println(task.Payload.Repository.CloneURL)
-	cmdClone := exec.Command("git", "clone", task.Payload.Repository.CloneURL, "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+	PAT, errRead := os.ReadFile("./PAT.txt")
+	if errRead != nil {
+		return errRead
+	}
+	cmdClone := exec.Command("git", "clone", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	outputClone, errClone := cmdClone.Output()
 	if errClone != nil {
 		logrus.Error(errClone, string(outputClone))

@@ -15,8 +15,8 @@
 # vendor/
 
 # custom files
-fake_gopath
-repos
-.idea
+fake_gopath/
+repos/
+.idea/
 .DS_Store
-
+queue/PAT.txt
