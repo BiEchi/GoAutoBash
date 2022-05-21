@@ -87,7 +87,7 @@ func ExecuteTask(task *Task) error {
 	if err != nil {
 		logrus.Error(err, string(output))
 		return err
-	}
+	} /**/
 	return nil
 }
 
