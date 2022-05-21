@@ -17,4 +17,5 @@
 # custom files
 fake_gopath
 repos
+.idea
 
