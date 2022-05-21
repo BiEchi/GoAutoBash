@@ -89,11 +89,20 @@ func ExecuteTask(task *Task) error {
 	}
 
 	/* dispatch other tasks to external bash program */
-	cmdBash := exec.Command("bash", "test.sh")
+	cmdBash := exec.Command("bash", "mp1.sh") /* for example, this is for MP1 */
 	outputBash, errBash := cmdBash.Output()
 	if errBash != nil {
 		logrus.Error(errBash, string(outputBash))
 		return errBash
+	}
+	/* push the generated dir to another branch on GitHub */
+	cmdPush := exec.Command("git", "push", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], "origin", "klc3")
+	outputPush, errPush := cmdPush.Output()
+	if errPush != nil {
+		logrus.Error(errPush, string(outputPush))
+		return errPush
+	} else {
+		logrus.Info("Pushed ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 	return nil
 }
