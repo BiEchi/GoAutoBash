@@ -43,8 +43,8 @@ func webhookHandler(c *gin.Context) {
 	// append all the operations for each event below.
 	switch payload.(type) {
 	case github.PushPayload:
-		/* if the push is not on the "main" branch, return immediately */
-		if payload.(github.PushPayload).Ref != "refs/heads/main" {
+		/* if the server is the pusher, return without enqueuing */
+		if payload.(github.PushPayload).Pusher.Name == "haob2" {
 			return
 		}
 		push := payload.(github.PushPayload)
