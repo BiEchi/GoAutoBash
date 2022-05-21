@@ -95,24 +95,25 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errBash, string(outputBash))
 		return errBash
 	}
-	/* push the generated dir to another branch on GitHub */
-	cmdPush1 := exec.Command("touch", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID+"/README.md")
-	outputPush1, errPush1 := cmdPush1.Output()
-	if errPush1 != nil {
-		logrus.Error(errPush1, string(outputPush1))
-		return errPush1
-	} else {
-		logrus.Info("Maked MD: ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+
+	/* generate a README.md */
+	cmdTouch := exec.Command("touch", "README.md")
+	cmdTouch.Dir = "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
+	outputTouch, errTouch := cmdTouch.Output()
+	if errTouch != nil {
+		logrus.Error(errTouch, string(outputTouch))
+		return errTouch
 	}
 
-	cmdPush := exec.Command("cd", "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID, "&& git branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report_"+task.Payload.HeadCommit.ID)
+	/* push the generated dir to another branch on GitHub */
+	cmdPush := exec.Command("git branch report && git checkout report && git add . && git commit -m \"Report Generated.\" && git push origin report_" + task.Payload.HeadCommit.ID)
+	cmdPush.Dir = "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
 	outputPush, errPush := cmdPush.Output()
 	if errPush != nil {
 		logrus.Error(errPush, string(outputPush))
 		return errPush
-	} else {
-		logrus.Info("Pushed ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
+
 	return nil
 }
 
