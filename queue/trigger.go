@@ -65,7 +65,7 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 				statusMap[task.Name].Error = err
 				mutex.Unlock()
 			}
-		}(i)
+		}(i) /**/
 	}
 
 	return nil
