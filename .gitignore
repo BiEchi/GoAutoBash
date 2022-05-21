@@ -17,5 +17,6 @@
 # custom files
 fake_gopath
 repos
-.idea
+.idea'
+.DS_Store
 
