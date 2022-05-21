@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6cfe2e0f-0760-40a6-ad70-b3df975f5d85" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/queue/PAT.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/queue/trigger.go" beforeDir="false" afterPath="$PROJECT_DIR$/queue/trigger.go" afterDir="false" />
-    </list>
+    <list default="true" id="6cfe2e0f-0760-40a6-ad70-b3df975f5d85" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
