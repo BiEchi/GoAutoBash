@@ -80,7 +80,7 @@ func ExecuteTask(task *Task) error {
 	if errClone != nil {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
-	}
+	} /**/
 
 	/* dispatch other tasks to external programs */
 	cmd := exec.Command("bash", "test.sh")
