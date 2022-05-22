@@ -43,42 +43,28 @@ def generate_readme(easy_test_report: str, regression_report: str, report: str, 
 main functions
 """
 
+
 def launcher(directory: str):
-    # parse student code
+    # use the python launcher to block the process
     """
-    --use-forked-solver=false                         \
-    --copy-additional-file ../../../asserts/replay.sh \
-    --max-lc3-step-count=200000                       \
-    --max-lc3-out-length=1100                         \
-    sched_alloc_.asm                                  \
-    stack_alloc_.asm                                  \
-    sched.asm                                         \
-    extra.asm                                         \
-    --test "$1"                                       \
-    --gold examples/mp3_gold.asm
+    "docker", "run", "-d", "-P", "-v=/root/GoAutoBash/"+dir+"/report:/home/klee/report:Z", "liuzikai/klc3", 
+				"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false", 
+					"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100", 
+					"report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
     """
 
     proc = subprocess.Popen(
         [
-            "docker", 
-            
-            "klc3", 
-            '--test=student.asm", 
-            '--gold=gold.asm",
-            '--use-forked-solver=false',
-            '--copy-additional-file' directory+"replay.sh",
-            '--max-lc3-step-count=200000',
-            '--max-lc3-out-length=1100',
-            'sched_alloc_.asm',
-            'stack_alloc_.asm',
-            'sched.asm',
-            'extra.asm'],
+            "docker", "run", "-d", "-P", "-v=/root/GoAutoBash/"+directory+"/report:/home/klee/report:Z", "liuzikai/klc3", 
+			"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false", 
+				"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100", 
+				"report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
         ], 
         stdout=subprocess.PIPE, 
         stderr=subprocess.STDOUT)
 
-
-            
+    # return the exit code
+    return proc.wait()
 
 
 if __name__ == "__main__":
