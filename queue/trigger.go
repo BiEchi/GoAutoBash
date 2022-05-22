@@ -92,14 +92,14 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
 	} else {
+		/* delete the github hook for the subdir */
+		execCommand(dir, "rm", "-rf", ".git")
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
 	/* extract the MP source file to the report subdir */
 	execCommand(dir, "mkdir", "report")
 	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
-	/* delete the github hook for the subdir */
-	execCommand(dir, "rm", "-rf", ".git")
 
 	/* dispatch other tasks to external bash program */
 	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
