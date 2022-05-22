@@ -108,13 +108,19 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "../../../mp"+numMP+"/stack_alloc_.asm", "report")
 	}
 
-	/* dispatch other tasks to external bash program */
-	// execCommand(".", "python3", "mp"+numMP+".py", "--dir="+dir)
-	/* delete the source files */
+	/* allow the container to write to the host machine */
+	execCommand(dir, "chmod", "0777", "report")
+	/* run the docker container */
+	execCommand(".", "docker", "run -d -P", "-v="+dir+"/report:/home/klee/report:Z", "liuzikai/klc3", 
+				"klc3", "--test", "report/student.asm", "--gold", "report/gold.asm", "--use-forked-solver=false", 
+					"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100", 
+					"report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm")
+
+/* delete the source files */
 	execCommand(dir, "rm", "report/gold.asm")
 	execCommand(dir, "rm", "report/student.asm")
 
-	/* check whether .git exists in haob2 using function PathExists */
+	/* check whether .git exists and push to the report branch */
 	if PathExists("report" + "/" + task.Payload.Pusher.Name + "/.git") {
 		/* the git is already linked: simply push to the remote */
 		/* push the generated dir to another branch on GitHub */
