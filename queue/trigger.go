@@ -79,7 +79,7 @@ func ExecuteTask(task *Task) error {
 	commitId := task.Payload.HeadCommit.ID[:4]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
-	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-cmt" + commitId + "-" + dt.Format("01-02-2016 15:04:05")
+	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-cmt" + commitId + "-" + dt.Format("01-02 15:04:05")
 
 	/* clone the commit to local for later use */
 	PAT, errRead := os.ReadFile("./queue/PAT.txt")
@@ -105,12 +105,25 @@ func ExecuteTask(task *Task) error {
 
 	/* generate a README.md */
 	execCommand(dir, "touch", "README.md")
-	/* push the generated dir to another branch on GitHub */
-	execCommand(dir, "git", "branch", "report")
-	execCommand(dir, "git", "checkout", "report")
-	execCommand(dir, "git", "add", ".")
-	execCommand(dir, "git", "commit", "-m", "Report Generated.")
-	execCommand(dir, "git", "push", "origin", "report")
+
+	/* check whether .git exists in haob2 using function PathExists */
+	if !PathExists("report" + "/" + task.Payload.Pusher.Name + ".git") {
+		/* the git is already linked: simply push to the remote */
+		/* push the generated dir to another branch on GitHub */
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "branch", "report")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "checkout", "report")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "add", ".")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated.")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "push", "origin", "report", "--force")
+	} else {
+		/* the git is not linked: init the repo and push the first report to the report branch of the server */
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "init")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "add", ".")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "git remote add origin"+"https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:])
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "branch", "-m", "report")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "push", "origin", "-u", "report")
+	}
 
 	return nil
 }
@@ -137,4 +150,15 @@ func execCommand(dir string, name string, arg ...string) ([]byte, error) {
 		return output, err
 	}
 	return output, nil
+}
+
+func PathExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
 }
