@@ -119,7 +119,7 @@ func ExecuteTask(task *Task) error {
 		/* the git is not linked: init the repo and push the first report to the report branch of the server */
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "init")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "add", ".")
-		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated")
+		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated.")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "remote", "add", "origin", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:])
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "branch", "-m", "report")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "push", "origin", "-u", "report")
