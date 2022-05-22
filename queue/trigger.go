@@ -102,12 +102,12 @@ func ExecuteTask(task *Task) error {
 	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
 
 	/* dispatch other tasks to external bash program */
-	cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
-	outputBash, errBash := cmdBash.Output()
-	if errBash != nil {
-		logrus.Error(errBash, string(outputBash))
-		return errBash
-	}
+	// cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
+	// outputBash, errBash := cmdBash.Output()
+	// if errBash != nil {
+	// 	logrus.Error(errBash, string(outputBash))
+	// 	return errBash
+	// }
 
 	/* check whether .git exists in haob2 using function PathExists */
 	if PathExists("report" + "/" + task.Payload.Pusher.Name + "/.git") {
