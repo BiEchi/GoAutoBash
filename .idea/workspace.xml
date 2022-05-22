@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6cfe2e0f-0760-40a6-ad70-b3df975f5d85" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/queue/trigger.go" beforeDir="false" afterPath="$PROJECT_DIR$/queue/trigger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mp1.sh" beforeDir="false" afterPath="$PROJECT_DIR$/mp1.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
