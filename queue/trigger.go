@@ -97,7 +97,7 @@ func ExecuteTask(task *Task) error {
 		/* extract the MP source file to the report subdir */
 		execCommand(dir, "mkdir", "report")
 		execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
-		execCommand(dir, "cp", "../../../mp"+numMP+"/extra.asm", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/\*", "report")
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
