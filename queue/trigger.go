@@ -201,4 +201,5 @@ func append(filename string, content string) error {
 	if _, err = f.WriteString(text); err != nil {
 		panic(err)
 	}
+	return nil
 }
