@@ -45,30 +45,40 @@ main functions
 
 def launcher(directory: str):
     # copy the replay file to this student commit dir
-    shutil.copy("templates/replay.sh", directory)
+    shutil.copy("templates/mp3/*", directory)
     
     # parse student code
-    proc = subprocess.Popen(["klc3-parser", "student.asm"], cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    with open(os.path.join(directory, "klc3-parser-student.log", "w"), "w") as f:
-        # poll the process until the process has output
-        while proc.poll() is None:
-            line = proc.stdout.readline()
-            f.write(line.decode("utf-8"))
-        exit_code = proc.wait()
-        # compilation failed
-        if exit_code != 0:
-            cprint("klc3-parser on student code failed", "red")
-            generate_readme(FAIL_ICON + " Your code failed to compile.\n" \
-                        + "\n" \
-                        + "lc3as output:\n" \
-                        + "```\n" \
-                        + open(os.path.join(output_dir, "klc3-parser-student.log"), "r").read() \
-                        + "\n```", 
-                        FAIL_ICON + " Your code failed to compile.",
-                        FAIL_ICON + " Your code failed to compile.",
-                        FAIL_ICON + " Your code failed to compile.",
-                        directory
-                        )
+    """
+    --use-forked-solver=false                         \
+    --copy-additional-file ../../../asserts/replay.sh \
+    --max-lc3-step-count=200000                       \
+    --max-lc3-out-length=1100                         \
+    sched_alloc_.asm                                  \
+    stack_alloc_.asm                                  \
+    sched.asm                                         \
+    extra.asm                                         \
+    --test "$1"                                       \
+    --gold examples/mp3_gold.asm
+    """
+
+    proc = subprocess.Popen(
+        [
+            "klc3", 
+            '--test=student.asm", 
+            '--gold=gold.asm",
+            '--use-forked-solver=false',
+            '--copy-additional-file' directory+"replay.sh",
+            '--max-lc3-step-count=200000',
+            '--max-lc3-out-length=1100',
+            'sched_alloc_.asm',
+            'stack_alloc_.asm',
+            'sched.asm',
+            'extra.asm'],
+        ], 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.STDOUT)
+
+
             
 
 
