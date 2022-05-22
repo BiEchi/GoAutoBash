@@ -95,6 +95,10 @@ func ExecuteTask(task *Task) error {
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
+	/* extract the MP source file to the dir report */
+	execCommand(dir, "mkdir", "report")
+	execCommand(dir, "mv", "/mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
+
 	/* dispatch other tasks to external bash program */
 	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
 	outputBash, errBash := cmdBash.Output()
