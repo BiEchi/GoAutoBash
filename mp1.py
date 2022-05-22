@@ -44,9 +44,6 @@ main functions
 """
 
 def launcher(directory: str):
-    # copy the replay file to this student commit dir
-    shutil.copy("templates/mp3/*", directory)
-    
     # parse student code
     """
     --use-forked-solver=false                         \

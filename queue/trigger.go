@@ -100,6 +100,7 @@ func ExecuteTask(task *Task) error {
 	/* extract the MP source file to the report subdir */
 	execCommand(dir, "mkdir", "report")
 	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
+	execCommand(".", "cp", "mp3/*", dir+"/report/")
 
 	/* dispatch other tasks to external bash program */
 	// cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
