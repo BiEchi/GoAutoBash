@@ -97,7 +97,13 @@ func ExecuteTask(task *Task) error {
 		/* extract the MP source file to the report subdir */
 		execCommand(dir, "mkdir", "report")
 		execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
-		execCommand(dir, "cp", "../../../mp"+numMP+"/\*", "report")
+		/* copy all the files to the report generation dir, must copy one by one */
+		execCommand(dir, "cp", "../../../mp"+numMP+"/extra.asm", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/gold.asm", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/replay.sh", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/sched_alloc_.asm", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/sched.asm", "report")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/stack_alloc_.asm", "report")
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
