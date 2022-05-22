@@ -93,7 +93,7 @@ func ExecuteTask(task *Task) error {
 		return errClone
 	} else {
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
-		
+
 		/* delete the github hook for the subdir */
 		execCommand(dir, "rm", "-rf", ".git")
 		/* extract the MP source file to the report subdir */
@@ -105,7 +105,7 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "../../../mp"+numMP+"/mem_alloc.asm", "report")
 		execCommand(dir, "cp", "../../../mp"+numMP+"/test_data.asm", "report")
 		execCommand(dir, "cp", "../../../mp"+numMP+"/replay.sh", "report")
-		
+
 		/* MP3 */
 		// execCommand(dir, "cp", "../../../mp"+numMP+"/extra.asm", "report")
 		// execCommand(dir, "cp", "../../../mp"+numMP+"/gold.asm", "report")
@@ -119,56 +119,16 @@ func ExecuteTask(task *Task) error {
 	execCommand(dir, "chmod", "0777", "report")
 	/* run the docker container */
 	// execCommand(".", "python3", "mp"+numMP+".py", "-d="+dir)
-	execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report:/home/klee/report:Z", "liuzikai/klc3", 
-				"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false", 
-				"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100", 
-				/* MP2 */
-				"report/mem_alloc.asm", "report/test_data.asm")
-				/* MP3 */
-				// "report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
-	
+	execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report:/home/klee/report:Z", "liuzikai/klc3",
+		"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false",
+		"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
+		/* MP2 */
+		"report/mem_alloc.asm", "report/test_data.asm")
+	/* MP3 */
+	// "report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
+
 	/* prepend disclaimer to the report markdown */
-	prepend(dir+"report/klc3-out-0/report.md", 
-	"""
-	# KLC3 (Beta) Report and DISCLAIMER
-	
-	KLC3 feedback tool first runs the tests distributed with mp2 to you, reported in section [Easy Test](#easy-test).
-	If you pass all these tests, KLC3 starts symbolic execution ([what is this?](https://en.wikipedia.org/wiki/Symbolic_execution)
-	on your code trying to find any input (test case) to trigger your bugs. When a bug is detected, a test case will be provided to you.
-	
-	We want you to resolve bugs detected before KLC3
-	runs time-consuming symbolic execution again, so on your next commit, KLC3 will runs all test cases previously provided
-	to you, in the section [Regression Test](#regression-test). If they are all passed, KLC3 will try to find new test
-	cases that can trigger bugs in your code, in the section [Report](#report).
-	
-	KLC3 is still under test. This report can be **incorrect** or even **misleading**. If you think there is
-	something wrong or unclear, please contact the TAs on [Piazza](http://piazza.com/illinois/fall2020/ece220zjui)
-	(but do not share your code, test cases or reports). Suggestions are also welcomed. Remember that the tool is only
-	to **assist** your work. Even if it can't find any issue, it's **not** guaranteed that you will get the full score,
-	and vice versa.
-	
-	**If lc3sim on your own machine generates different result than the feedback, first check whether you have used uninitialized memory or registers.**
-	
-	## How to Use Test Cases (Advanced)
-
-	If an issue is detected, a corresponding test case will be generated in the folder `test******`. The test data is in
-	the asm file. You may copy its content and test your subroutine yourself.
-
-	The lcs file is the lc3sim script for you to debug. We have provided a script file for you. Download or checkout this
-	branch. In current folder, run the command:
-
-	```
-	./replay.sh <test name or index>
-	```
-
-	where `index` is a decimal index of the test case, and the script will launch lc3sim for you, where you can debug.
-	If you can't execute the script, you may need:
-
-	```
-	chmod +x replay.sh
-	```
-	""")
-
+	prepend(dir+"report/klc3-out-0/report.md", "# KLC3 (Beta) Report and DISCLAIMER\n\t\n\tKLC3 feedback tool first runs the tests distributed with mp2 to you, reported in section [Easy Test](#easy-test).\n\tIf you pass all these tests, KLC3 starts symbolic execution ([what is this?](https://en.wikipedia.org/wiki/Symbolic_execution)\n\ton your code trying to find any input (test case) to trigger your bugs. When a bug is detected, a test case will be provided to you.\n\t\n\tWe want you to resolve bugs detected before KLC3\n\truns time-consuming symbolic execution again, so on your next commit, KLC3 will runs all test cases previously provided\n\tto you, in the section [Regression Test](#regression-test). If they are all passed, KLC3 will try to find new test\n\tcases that can trigger bugs in your code, in the section [Report](#report).\n\t\n\tKLC3 is still under test. This report can be **incorrect** or even **misleading**. If you think there is\n\tsomething wrong or unclear, please contact the TAs on [Piazza](http://piazza.com/illinois/fall2020/ece220zjui)\n\t(but do not share your code, test cases or reports). Suggestions are also welcomed. Remember that the tool is only\n\tto **assist** your work. Even if it can't find any issue, it's **not** guaranteed that you will get the full score,\n\tand vice versa.\n\t\n\t**If lc3sim on your own machine generates different result than the feedback, first check whether you have used uninitialized memory or registers.**\n\t\n\t## How to Use Test Cases (Advanced)\n\n\tIf an issue is detected, a corresponding test case will be generated in the folder `test******`. The test data is in\n\tthe asm file. You may copy its content and test your subroutine yourself.\n\n\tThe lcs file is the lc3sim script for you to debug. We have provided a script file for you. Download or checkout this\n\tbranch. In current folder, run the command:\n\n\t```\n\t./replay.sh <test name or index>\n\t```\n\n\twhere `index` is a decimal index of the test case, and the script will launch lc3sim for you, where you can debug.\n\tIf you can't execute the script, you may need:\n\n\t```\n\tchmod +x replay.sh\n\t```")
 	/* delete the source files */
 	execCommand(dir, "rm", "report/gold.asm")
 	execCommand(dir, "rm", "report/student.asm")
