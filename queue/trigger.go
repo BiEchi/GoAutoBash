@@ -194,4 +194,6 @@ func prepend(filename string, content string) error {
 	execCommand(".", "echo", content, ">>", "/tmp/newfile")
 	execCommand(".", "cat", filename, ">>", "/tmp/newfile")
 	execCommand(".", "cp", "/tmp/newfile", filename)
+
+	return nil
 }
