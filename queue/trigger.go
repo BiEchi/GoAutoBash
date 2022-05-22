@@ -198,7 +198,7 @@ func append(filename string, content string) error {
 
 	defer f.Close()
 
-	if _, err = f.WriteString(text); err != nil {
+	if _, err = f.WriteString(content); err != nil {
 		panic(err)
 	}
 	return nil
