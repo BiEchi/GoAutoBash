@@ -105,6 +105,8 @@ func ExecuteTask(task *Task) error {
 
 	/* generate a README.md */
 	execCommand(dir, "touch", "README.md")
+	/* delete the github hook for the subdir */
+	execCommand(dir, "rm", "-rf", ".git")
 
 	/* check whether .git exists in haob2 using function PathExists */
 	if PathExists("report" + "/" + task.Payload.Pusher.Name + ".git") {
