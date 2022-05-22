@@ -76,10 +76,10 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 func ExecuteTask(task *Task) error {
 	/* global configs */
 	numMP := "1"
-	commitId := task.Payload.HeadCommit.ID[:4]
+	commitId := task.Payload.HeadCommit.ID[:6]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
-	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-commit-" + commitId + "-time-" + dt.Format("0102-15:04:05")
+	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "_" + commitId + "_" + dt.Format("01.02-15:04:05")
 
 	/* clone the commit to local for later use */
 	PAT, errRead := os.ReadFile("./queue/PAT.txt")
@@ -99,10 +99,10 @@ func ExecuteTask(task *Task) error {
 
 	/* extract the MP source file to the report subdir */
 	execCommand(dir, "mkdir", "report")
-	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
+	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
 
 	/* dispatch other tasks to external bash program */
-	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
+	cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
 	outputBash, errBash := cmdBash.Output()
 	if errBash != nil {
 		logrus.Error(errBash, string(outputBash))
