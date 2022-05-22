@@ -107,7 +107,7 @@ func ExecuteTask(task *Task) error {
 	execCommand(dir, "touch", "README.md")
 
 	/* check whether .git exists in haob2 using function PathExists */
-	if !PathExists("report" + "/" + task.Payload.Pusher.Name + ".git") {
+	if PathExists("report" + "/" + task.Payload.Pusher.Name + ".git") {
 		/* the git is already linked: simply push to the remote */
 		/* push the generated dir to another branch on GitHub */
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "branch", "report")
