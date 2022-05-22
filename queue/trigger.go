@@ -74,12 +74,19 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
+	/* global configs */
+	numMP := "1"
+	commitId := task.Payload.HeadCommit.ID[:4]
+	/* the cache dir is used to store the commit content */
+	dt := time.Now()
+	dir := "report" + task.Payload.Pusher.Name + "/MP" + numMP + commitId + "_" + dt.Format("2016-01-02 15:04:05")
+
 	/* clone the commit to local for later use */
 	PAT, errRead := os.ReadFile("./queue/PAT.txt")
 	if errRead != nil {
 		return errRead
 	}
-	cmdClone := exec.Command("git", "clone", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], "repos/"+task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+	cmdClone := exec.Command("git", "clone", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:], dir)
 	outputClone, errClone := cmdClone.Output()
 	if errClone != nil {
 		logrus.Error(errClone, string(outputClone))
@@ -89,22 +96,21 @@ func ExecuteTask(task *Task) error {
 	}
 
 	/* dispatch other tasks to external bash program */
-	cmdBash := exec.Command("bash", "mp1.sh") /* for example, this is for MP1 */
+	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
 	outputBash, errBash := cmdBash.Output()
 	if errBash != nil {
 		logrus.Error(errBash, string(outputBash))
 		return errBash
 	}
 
-	dir := "repos/" + task.Payload.Pusher.Name + "/" + task.Payload.HeadCommit.ID
 	/* generate a README.md */
 	execCommand(dir, "touch", "README.md")
 	/* push the generated dir to another branch on GitHub */
-	execCommand(dir, "git", "branch", "report_"+task.Payload.HeadCommit.ID[:7])
-	execCommand(dir, "git", "checkout", "report_"+task.Payload.HeadCommit.ID[:7])
+	execCommand(dir, "git", "branch", "report")
+	execCommand(dir, "git", "checkout", "report")
 	execCommand(dir, "git", "add", ".")
 	execCommand(dir, "git", "commit", "-m", "Report Generated.")
-	execCommand(dir, "git", "push", "origin", "report_"+task.Payload.HeadCommit.ID[:7])
+	execCommand(dir, "git", "push", "origin", "report")
 
 	return nil
 }
