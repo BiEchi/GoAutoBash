@@ -79,7 +79,7 @@ func ExecuteTask(task *Task) error {
 	commitId := task.Payload.HeadCommit.ID[:4]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
-	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-commit-" + commitId + "-time-" + dt.Format("01-02 15:04:05")
+	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-commit-" + commitId + "-time-" + dt.Format("0102-15:04:05")
 
 	/* clone the commit to local for later use */
 	PAT, errRead := os.ReadFile("./queue/PAT.txt")
@@ -97,7 +97,7 @@ func ExecuteTask(task *Task) error {
 
 	/* extract the MP source file to the dir report */
 	execCommand(dir, "mkdir", "report")
-	execCommand(dir, "mv", "/mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
+	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
 
 	/* dispatch other tasks to external bash program */
 	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
