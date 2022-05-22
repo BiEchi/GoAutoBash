@@ -95,9 +95,11 @@ func ExecuteTask(task *Task) error {
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
-	/* extract the MP source file to the dir report */
+	/* extract the MP source file to the report subdir */
 	execCommand(dir, "mkdir", "report")
 	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/")
+	/* delete the github hook for the subdir */
+	execCommand(dir, "rm", "-rf", ".git")
 
 	/* dispatch other tasks to external bash program */
 	cmdBash := exec.Command("bash", "mp"+numMP+".sh")
@@ -106,9 +108,6 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errBash, string(outputBash))
 		return errBash
 	}
-
-	/* delete the github hook for the subdir */
-	execCommand(dir, "rm", "-rf", ".git")
 
 	/* check whether .git exists in haob2 using function PathExists */
 	if PathExists("report" + "/" + task.Payload.Pusher.Name + "/.git") {
