@@ -19,20 +19,19 @@ and vice versa.
 
 ## Easy Test
 
-{{EASY_TEST_REPORT}}
-
+EASY_TEST_REPORT
 
 ## Regression Test
 
-{{REGRESSION_REPORT}}
+REGRESSION_REPORT
 
 ## Report
 
-{{MP3_SUBROUTINE_REPORT}}
+MP3_SUBROUTINE_REPORT
 
 _
 
-{{REPORT}}
+REPORT
 
 ## How to Use Test Cases (Advanced)
 

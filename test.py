@@ -400,10 +400,10 @@ def run_mp3_subroutine_test(student_filename: str, root_output_dir: str, root_te
 def generate_readme(easy_test_report: str, regression_report: str, report: str, mp3_subroutine_report: str,
                     output_dir: str) -> None:
     content  open("templates/klc3_report.md", "r").read()
-    content = content.replace("{{EASY_TEST_REPORT}}", easy_test_report)
-    content = content.replace("{{REGRESSION_REPORT}}", regression_report)
-    content = content.replace("{{MP3_SUBROUTINE_REPORT}}", mp3_subroutine_report)
-    content = content.replace("{{REPORT}}", report)
+    content = content.replace("EASY_TEST_REPORT", easy_test_report)
+    content = content.replace("REGRESSION_REPORT", regression_report)
+    content = content.replace("MP3_SUBROUTINE_REPORT", mp3_subroutine_report)
+    content = content.replace("REPORT", report)
     open(os.path.join(output_dir, "README.md"), "w").write(content)
 
 
