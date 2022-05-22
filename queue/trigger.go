@@ -107,8 +107,6 @@ func ExecuteTask(task *Task) error {
 		return errBash
 	}
 
-	/* generate a README.md */
-	execCommand(dir, "touch", "README.md")
 	/* delete the github hook for the subdir */
 	execCommand(dir, "rm", "-rf", ".git")
 
