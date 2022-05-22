@@ -94,13 +94,12 @@ func ExecuteTask(task *Task) error {
 	} else {
 		/* delete the github hook for the subdir */
 		execCommand(dir, "rm", "-rf", ".git")
+		/* extract the MP source file to the report subdir */
+		execCommand(dir, "mkdir", "report")
+		execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
+		execCommand(dir, "cp", "../../../mp"+numMP+"/*", "report")
 		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
-
-	/* extract the MP source file to the report subdir */
-	execCommand(dir, "mkdir", "report")
-	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
-	execCommand(dir, "cp", "../../../mp"+numMP+"/*", "report")
 
 	/* dispatch other tasks to external bash program */
 	// cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
