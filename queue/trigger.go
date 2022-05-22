@@ -75,7 +75,7 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
 	/* global configs */
-	numMP := "1"
+	numMP := "3"
 	commitId := task.Payload.HeadCommit.ID[:6]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
@@ -100,7 +100,7 @@ func ExecuteTask(task *Task) error {
 	/* extract the MP source file to the report subdir */
 	execCommand(dir, "mkdir", "report")
 	execCommand(dir, "cp", "mp/mp"+numMP+"/mp"+numMP+".asm", "report/student.asm")
-	execCommand(".", "cp", "mp3/*", dir+"/report/")
+	execCommand(".", "cp", "mp"+numMP+"/*", "/"+dir+"/report/")
 
 	/* dispatch other tasks to external bash program */
 	// cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
