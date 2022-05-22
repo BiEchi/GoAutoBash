@@ -126,7 +126,48 @@ func ExecuteTask(task *Task) error {
 				"report/mem_alloc.asm", "report/test_data.asm")
 				/* MP3 */
 				// "report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
-			
+	
+	/* prepend disclaimer to the report markdown */
+	prepend(dir+"report/klc3-out-0/report.md", 
+	"""
+	# KLC3 (Beta) Report and DISCLAIMER
+	
+	KLC3 feedback tool first runs the tests distributed with mp2 to you, reported in section [Easy Test](#easy-test).
+	If you pass all these tests, KLC3 starts symbolic execution ([what is this?](https://en.wikipedia.org/wiki/Symbolic_execution)
+	on your code trying to find any input (test case) to trigger your bugs. When a bug is detected, a test case will be provided to you.
+	
+	We want you to resolve bugs detected before KLC3
+	runs time-consuming symbolic execution again, so on your next commit, KLC3 will runs all test cases previously provided
+	to you, in the section [Regression Test](#regression-test). If they are all passed, KLC3 will try to find new test
+	cases that can trigger bugs in your code, in the section [Report](#report).
+	
+	KLC3 is still under test. This report can be **incorrect** or even **misleading**. If you think there is
+	something wrong or unclear, please contact the TAs on [Piazza](http://piazza.com/illinois/fall2020/ece220zjui)
+	(but do not share your code, test cases or reports). Suggestions are also welcomed. Remember that the tool is only
+	to **assist** your work. Even if it can't find any issue, it's **not** guaranteed that you will get the full score,
+	and vice versa.
+	
+	**If lc3sim on your own machine generates different result than the feedback, first check whether you have used uninitialized memory or registers.**
+	
+	## How to Use Test Cases (Advanced)
+
+	If an issue is detected, a corresponding test case will be generated in the folder `test******`. The test data is in
+	the asm file. You may copy its content and test your subroutine yourself.
+
+	The lcs file is the lc3sim script for you to debug. We have provided a script file for you. Download or checkout this
+	branch. In current folder, run the command:
+
+	```
+	./replay.sh <test name or index>
+	```
+
+	where `index` is a decimal index of the test case, and the script will launch lc3sim for you, where you can debug.
+	If you can't execute the script, you may need:
+
+	```
+	chmod +x replay.sh
+	```
+	""")
 
 	/* delete the source files */
 	execCommand(dir, "rm", "report/gold.asm")
@@ -186,4 +227,11 @@ func PathExists(path string) bool {
 		return false
 	}
 	return false
+}
+
+/* prepend some content to a file */
+func prepend(filename string, content string) error {
+	execCommand(".", "echo", content, ">>", "/tmp/newfile")
+	execCommand(".", "cat", filename, ">>", "/tmp/newfile")
+	execCommand(".", "cp", "/tmp/newfile", filename)
 }
