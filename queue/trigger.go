@@ -159,7 +159,7 @@ func execCommand(dir string, name string, arg ...string) ([]byte, error) {
 	output, err := cmd.Output()
 	logrus.Info(string(output) + ": first argument is " + arg[0])
 	if err != nil {
-		logrus.Error(err, string(output)+": first argument is "+arg[0])
+		logrus.Error(err)
 		return output, err
 	}
 	return output, nil
