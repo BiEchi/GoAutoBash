@@ -75,7 +75,7 @@ func StartQueue(consumerCount int, chanSize int, waitTime time.Duration) error {
 // ExecuteTask is the function to execute whatever you want to trigger after an event occurs!
 func ExecuteTask(task *Task) error {
 	/* global configs */
-	numMP := "3"
+	numMP := "2"
 	commitId := task.Payload.HeadCommit.ID[:6]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
