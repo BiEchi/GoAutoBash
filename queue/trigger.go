@@ -122,7 +122,11 @@ func ExecuteTask(task *Task) error {
 	execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report:/home/klee/report:Z", "liuzikai/klc3", 
 				"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false", 
 				"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100", 
-				"report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm")
+				/* MP2 */
+				"report/mem_alloc.asm", "report/test_data.asm"
+				/* MP3 */
+				// "report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
+			)
 
 	/* delete the source files */
 	execCommand(dir, "rm", "report/gold.asm")
