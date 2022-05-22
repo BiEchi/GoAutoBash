@@ -111,7 +111,7 @@ func ExecuteTask(task *Task) error {
 	/* allow the container to write to the host machine */
 	execCommand(dir, "chmod", "0777", "report")
 	/* run the docker container */
-	_, errPython := execCommand(".", "python3", "mp"+numMP+".py", dir)
+	_, errPython := execCommand(".", "python3", "mp"+numMP+".py", "-d="+dir)
 	if errPython != nil {
 		return errPython
 	}

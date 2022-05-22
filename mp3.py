@@ -53,6 +53,7 @@ def launcher(directory: str):
 					"report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
     """
 
+    print("enter docker")
     proc = subprocess.Popen(
         [
             "docker", "run", "-d", "-P", "-v=/root/GoAutoBash/"+directory+"/report:/home/klee/report:Z", "liuzikai/klc3", 
@@ -62,9 +63,12 @@ def launcher(directory: str):
         ], 
         stdout=subprocess.PIPE, 
         stderr=subprocess.STDOUT)
-
+    
+    exit_code = proc.wait()
+    print("exit docker")
+    
     # return the exit code
-    return proc.wait()
+    return exit_code
 
 
 if __name__ == "__main__":
