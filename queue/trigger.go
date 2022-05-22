@@ -92,6 +92,8 @@ func ExecuteTask(task *Task) error {
 		logrus.Error(errClone, string(outputClone))
 		return errClone
 	} else {
+		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
+		
 		/* delete the github hook for the subdir */
 		execCommand(dir, "rm", "-rf", ".git")
 		/* extract the MP source file to the report subdir */
@@ -104,29 +106,26 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "../../../mp"+numMP+"/sched_alloc_.asm", "report")
 		execCommand(dir, "cp", "../../../mp"+numMP+"/sched.asm", "report")
 		execCommand(dir, "cp", "../../../mp"+numMP+"/stack_alloc_.asm", "report")
-		logrus.Info("Cloned ", task.Payload.Pusher.Name+"/"+task.Payload.HeadCommit.ID)
 	}
 
 	/* dispatch other tasks to external bash program */
-	// cmdBash := exec.Command("python3", "mp"+numMP+".py", "--dir="+dir)
-	// outputBash, errBash := cmdBash.Output()
-	// if errBash != nil {
-	// 	logrus.Error(errBash, string(outputBash))
-	// 	return errBash
-	// }
+	// execCommand(".", "python3", "mp"+numMP+".py", "--dir="+dir)
+	/* delete the source files */
+	execCommand(dir, "rm", "report/gold.asm")
+	execCommand(dir, "rm", "report/student.asm")
 
 	/* check whether .git exists in haob2 using function PathExists */
 	if PathExists("report" + "/" + task.Payload.Pusher.Name + "/.git") {
 		/* the git is already linked: simply push to the remote */
 		/* push the generated dir to another branch on GitHub */
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "checkout", "report")
-		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "add", ".")
+		execCommand(dir, "git", "add", "report")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated.")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "push", "origin", "report", "--force")
 	} else {
 		/* the git is not linked: init the repo and push the first report to the report branch of the server */
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "init")
-		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "add", ".")
+		execCommand(dir, "git", "add", "report")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "commit", "-m", "Report Generated.")
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "remote", "add", "origin", "https://haob2:"+string(PAT)+"@"+task.Payload.Repository.CloneURL[8:])
 		execCommand("report"+"/"+task.Payload.Pusher.Name, "git", "branch", "-m", "report")

@@ -60,6 +60,7 @@ def launcher(directory: str):
 
     proc = subprocess.Popen(
         [
+            "docker", 
             "klc3", 
             '--test=student.asm", 
             '--gold=gold.asm",
