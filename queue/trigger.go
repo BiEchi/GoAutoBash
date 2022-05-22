@@ -79,7 +79,7 @@ func ExecuteTask(task *Task) error {
 	commitId := task.Payload.HeadCommit.ID[:4]
 	/* the cache dir is used to store the commit content */
 	dt := time.Now()
-	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-" + commitId + "_" + dt.Format("2016-01-02 15:04:05")
+	dir := "report" + "/" + task.Payload.Pusher.Name + "/MP" + numMP + "-cmt" + commitId + "-" + dt.Format("01-02-2016 15:04:05")
 
 	/* clone the commit to local for later use */
 	PAT, errRead := os.ReadFile("./queue/PAT.txt")
