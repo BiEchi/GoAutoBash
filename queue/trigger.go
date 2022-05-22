@@ -128,7 +128,7 @@ func ExecuteTask(task *Task) error {
 	// "report/sched_alloc_.asm", "report/stack_alloc_.asm", "report/sched.asm", "report/extra.asm"
 
 	/* prepend disclaimer to the report markdown */
-	prepend(dir+"/report/klc3-out-0/report.md", "# KLC3 (Beta) Report and DISCLAIMER\n\t\n\tKLC3 feedback tool first runs the tests distributed with mp2 to you, reported in section [Easy Test](#easy-test).\n\tIf you pass all these tests, KLC3 starts symbolic execution ([what is this?](https://en.wikipedia.org/wiki/Symbolic_execution)\n\ton your code trying to find any input (test case) to trigger your bugs. When a bug is detected, a test case will be provided to you.\n\t\n\tWe want you to resolve bugs detected before KLC3\n\truns time-consuming symbolic execution again, so on your next commit, KLC3 will runs all test cases previously provided\n\tto you, in the section [Regression Test](#regression-test). If they are all passed, KLC3 will try to find new test\n\tcases that can trigger bugs in your code, in the section [Report](#report).\n\t\n\tKLC3 is still under test. This report can be **incorrect** or even **misleading**. If you think there is\n\tsomething wrong or unclear, please contact the TAs on [Piazza](http://piazza.com/illinois/fall2020/ece220zjui)\n\t(but do not share your code, test cases or reports). Suggestions are also welcomed. Remember that the tool is only\n\tto **assist** your work. Even if it can't find any issue, it's **not** guaranteed that you will get the full score,\n\tand vice versa.\n\t\n\t**If lc3sim on your own machine generates different result than the feedback, first check whether you have used uninitialized memory or registers.**\n\t\n\t## How to Use Test Cases (Advanced)\n\n\tIf an issue is detected, a corresponding test case will be generated in the folder `test******`. The test data is in\n\tthe asm file. You may copy its content and test your subroutine yourself.\n\n\tThe lcs file is the lc3sim script for you to debug. We have provided a script file for you. Download or checkout this\n\tbranch. In current folder, run the command:\n\n\t```\n\t./replay.sh <test name or index>\n\t```\n\n\twhere `index` is a decimal index of the test case, and the script will launch lc3sim for you, where you can debug.\n\tIf you can't execute the script, you may need:\n\n\t```\n\tchmod +x replay.sh\n\t```")
+	append(dir+"/report/klc3-out-0/report.md", "# KLC3 (Beta) Report and DISCLAIMER\n\t\n\tKLC3 feedback tool first runs the tests distributed with mp2 to you, reported in section [Easy Test](#easy-test).\n\tIf you pass all these tests, KLC3 starts symbolic execution ([what is this?](https://en.wikipedia.org/wiki/Symbolic_execution)\n\ton your code trying to find any input (test case) to trigger your bugs. When a bug is detected, a test case will be provided to you.\n\t\n\tWe want you to resolve bugs detected before KLC3\n\truns time-consuming symbolic execution again, so on your next commit, KLC3 will runs all test cases previously provided\n\tto you, in the section [Regression Test](#regression-test). If they are all passed, KLC3 will try to find new test\n\tcases that can trigger bugs in your code, in the section [Report](#report).\n\t\n\tKLC3 is still under test. This report can be **incorrect** or even **misleading**. If you think there is\n\tsomething wrong or unclear, please contact the TAs on [Piazza](http://piazza.com/illinois/fall2020/ece220zjui)\n\t(but do not share your code, test cases or reports). Suggestions are also welcomed. Remember that the tool is only\n\tto **assist** your work. Even if it can't find any issue, it's **not** guaranteed that you will get the full score,\n\tand vice versa.\n\t\n\t**If lc3sim on your own machine generates different result than the feedback, first check whether you have used uninitialized memory or registers.**\n\t\n\t## How to Use Test Cases (Advanced)\n\n\tIf an issue is detected, a corresponding test case will be generated in the folder `test******`. The test data is in\n\tthe asm file. You may copy its content and test your subroutine yourself.\n\n\tThe lcs file is the lc3sim script for you to debug. We have provided a script file for you. Download or checkout this\n\tbranch. In current folder, run the command:\n\n\t```\n\t./replay.sh <test name or index>\n\t```\n\n\twhere `index` is a decimal index of the test case, and the script will launch lc3sim for you, where you can debug.\n\tIf you can't execute the script, you may need:\n\n\t```\n\tchmod +x replay.sh\n\t```")
 	/* delete the source files */
 	execCommand(dir, "rm", "report/gold.asm")
 	execCommand(dir, "rm", "report/student.asm")
@@ -189,11 +189,16 @@ func PathExists(path string) bool {
 	return false
 }
 
-/* prepend some content to a file */
-func prepend(filename string, content string) error {
-	execCommand(".", "echo", content, ">>", "/tmp/newfile")
-	execCommand(".", "cat", filename, ">>", "/tmp/newfile")
-	execCommand(".", "cp", "/tmp/newfile", filename)
+/* append some content to a file */
+func append(filename string, content string) error {
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		panic(err)
+	}
 
-	return nil
+	defer f.Close()
+
+	if _, err = f.WriteString(text); err != nil {
+		panic(err)
+	}
 }
