@@ -130,14 +130,14 @@ func ExecuteTask(task *Task) error {
 		/* we have previous run history, add the commits to list regTestList */
 		var regTestString string
 		fDirs, _ := ioutil.ReadDir("report" + "/" + task.Payload.Pusher.Name)
-		for _, fDir := range fDirs {
+		for i, fDir := range fDirs {
 			/* add to regression test when has prefix but not this dir */
 			if strings.HasPrefix(fDir.Name(), "MP"+numMP) && fDir.Name() != "MP"+numMP+"_"+commitId+"_"+dt.Format("01-02_15-04-05") {
 				/* add the dir to list regTestList */
-				regTestString += " report/regression/" + fDir.Name() + ".asm"
+				regTestString += " report/regression/" + string(rune(i)) + ".asm"
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
-					dir+"/report/regression/"+fDir.Name()+".asm")
+					dir+"/report/regression/"+string(rune(i))+".asm")
 			}
 		}
 		/* allow the container to write to the host machine */
