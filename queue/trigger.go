@@ -154,7 +154,7 @@ func ExecuteTask(task *Task) error {
 			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
 				"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
 				"--copy-additional-file=report/regression/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
-				/*regTest*/ "report/mem_alloc.asm", "report/test_data.asm")
+				/*regTest*/ "report/regression/mem_alloc.asm", "report/regression/test_data.asm")
 		}
 
 		execCommand(dir, "rm", "report/regression/gold.asm")
