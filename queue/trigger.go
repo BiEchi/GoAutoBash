@@ -134,10 +134,10 @@ func ExecuteTask(task *Task) error {
 			/* add to regression test when has prefix but not this dir */
 			if strings.HasPrefix(fDir.Name(), "MP"+numMP) && fDir.Name() != "MP"+numMP+"_"+commitId+"_"+dt.Format("01-02_15-04-05") {
 				/* add the dir to list regTestList */
-				regTestString += " report/regression/" + string(rune(i)) + ".asm"
+				regTestString += " report/regression/" + string(i) + ".asm"
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
-					dir+"/report/regression/"+string(rune(i))+".asm")
+					dir+"/report/regression/"+string(i)+".asm")
 			}
 		}
 		/* allow the container to write to the host machine */
