@@ -132,7 +132,7 @@ func ExecuteTask(task *Task) error {
 		for _, fDir := range fDirs {
 			if strings.HasPrefix(fDir.Name(), "MP"+numMP) {
 				/* add the dir to list regTestList */
-				regTest += " report/regression/" + fDir.Name()
+				regTest += " report/regression/" + fDir.Name() + ".asm"
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
 					dir+"/report/regression/"+fDir.Name()+".asm")
