@@ -128,6 +128,7 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "report/student.asm", "report/regression/student.asm")
 		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
 		execCommand(dir, "cp", "report/replay.sh", "report/regression/replay.sh")
+		execCommand(dir, "cp", "report/mem_alloc.sh", "report/regression/mem_alloc.sh")
 		/* we have previous run history, add the commits to list regTestList */
 		var regTestString string
 		fDirs, _ := ioutil.ReadDir("report" + "/" + task.Payload.Pusher.Name)
@@ -153,9 +154,9 @@ func ExecuteTask(task *Task) error {
 			println(regTest)
 			/* BUG: run the regression test */
 			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
-				"klc3" /*"--test=report/regression/student.asm", "--gold=report/regression/gold.asm",*/, "--use-forked-solver=false",
+				"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
 				"--copy-additional-file=report/regression/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
-				regTest, "report/regression/gold.asm")
+				regTest, "report/regression/mem_alloc.sh")
 		}
 		execCommand(dir, "rm", "report/regression/gold.asm")
 		execCommand(dir, "rm", "report/regression/student.asm")
