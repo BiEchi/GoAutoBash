@@ -144,8 +144,9 @@ func ExecuteTask(task *Task) error {
 		/* run the regression test on all previous testcases */
 		/* split regTestString to regTestList with splitter " " */
 		regTestList := strings.Split(regTestString[1:], " ")
-		println(regTestList)
+
 		for _, regTest := range regTestList {
+			println(regTest)
 			/* run the regression test */
 			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
 				"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
