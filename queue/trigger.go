@@ -128,14 +128,14 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
 		/* we have previous run history, add the commits to list regTestList */
 		var regTest string
-		f_dirs, _ := ioutil.ReadDir(dir)
-		for _, f_dir := range f_dirs {
-			if strings.HasPrefix(f_dir.Name(), "MP"+numMP) {
+		fDirs, _ := ioutil.ReadDir("report" + "/" + task.Payload.Pusher.Name)
+		for _, fDir := range fDirs {
+			if strings.HasPrefix(fDir.Name(), "MP"+numMP) {
 				/* add the dir to list regTestList */
-				regTest += "report/regression/" + f_dir.Name()
+				regTest += "report/regression/" + fDir.Name()
 				/* copy the testcase files to dir/report */
-				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+f_dir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
-					dir+"/report/regression/"+f_dir.Name())
+				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
+					dir+"/report/regression/"+fDir.Name())
 			}
 		}
 		print(regTest)
