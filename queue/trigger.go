@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -136,10 +137,10 @@ func ExecuteTask(task *Task) error {
 			if strings.HasPrefix(fDir.Name(), "MP"+numMP) && fDir.Name() != "MP"+numMP+"_"+commitId+"_"+dt.Format("01-02_15-04-05") {
 				i += 1
 				/* add the dir to list regTestList */
-				regTestString += " report/regression/" + string(i) + ".asm"
+				regTestString += " report/regression/" + strconv.Itoa(i) + ".asm"
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
-					dir+"/report/regression/"+string(i)+".asm")
+					dir+"/report/regression/"+strconv.Itoa(i)+".asm")
 			}
 		}
 		/* allow the container to write to the host machine */
