@@ -139,12 +139,12 @@ func ExecuteTask(task *Task) error {
 					dir+"/report/regression/"+fDir.Name()+".asm")
 			}
 		}
-		println(regTestString)
 		/* allow the container to write to the host machine */
 		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
 		/* split regTestString to regTestList with splitter " " */
-		regTestList := strings.Split(regTestString, " ")
+		regTestList := strings.Split(regTestString[1:], " ")
+		println(regTestList)
 		for _, regTest := range regTestList {
 			/* run the regression test */
 			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
