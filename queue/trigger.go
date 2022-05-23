@@ -241,7 +241,7 @@ func MPExists(dir string, numMP string, exclude string) bool {
 		return false
 	}
 	for _, f := range files {
-		if strings.HasPrefix(f.Name(), "MP"+numMP) && f.Name() != exclude {
+		if strings.HasPrefix(f.Name(), "MP"+numMP) && dir+"/"+f.Name() != exclude {
 			return true
 		}
 	}
