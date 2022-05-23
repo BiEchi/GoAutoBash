@@ -138,6 +138,7 @@ func ExecuteTask(task *Task) error {
 					dir+"/report/regression/"+f_dir.Name())
 			}
 		}
+		print(regTest)
 		/* allow the container to write to the host machine */
 		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
