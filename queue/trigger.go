@@ -135,7 +135,7 @@ func ExecuteTask(task *Task) error {
 				regTest += " report/regression/" + fDir.Name()
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
-					dir+"/report/regression/"+fDir.Name())
+					dir+"/report/regression/"+fDir.Name()+".asm")
 			}
 		}
 		print(regTest)
@@ -143,7 +143,7 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
 		execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
-			"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false",
+			"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
 			"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
 			regTest)
 	}
