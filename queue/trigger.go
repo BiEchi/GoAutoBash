@@ -127,26 +127,31 @@ func ExecuteTask(task *Task) error {
 		execCommand(dir, "cp", "report/student.asm", "report/regression/student.asm")
 		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
 		/* we have previous run history, add the commits to list regTestList */
-		var regTest string
+		var regTestString string
 		fDirs, _ := ioutil.ReadDir("report" + "/" + task.Payload.Pusher.Name)
 		for _, fDir := range fDirs {
 			/* add to regression test when has prefix but not this dir */
 			if strings.HasPrefix(fDir.Name(), "MP"+numMP) && fDir.Name() != "MP"+numMP+"_"+commitId+"_"+dt.Format("01-02_15-04-05") {
 				/* add the dir to list regTestList */
-				regTest += " report/regression/" + fDir.Name() + ".asm"
+				regTestString += " report/regression/" + fDir.Name() + ".asm"
 				/* copy the testcase files to dir/report */
 				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+fDir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
 					dir+"/report/regression/"+fDir.Name()+".asm")
 			}
 		}
-		println(regTest)
+		println(regTestString)
 		/* allow the container to write to the host machine */
 		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
-		execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
-			"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
-			"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
-			regTest)
+		/* split regTestString to regTestList with splitter " " */
+		regTestList := strings.Split(regTestString, " ")
+		for _, regTest := range regTestList {
+			/* run the regression test */
+			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
+				"klc3", "--test=report/regression/student.asm", "--gold=report/regression/gold.asm", "--use-forked-solver=false",
+				"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
+				regTest)
+		}
 	}
 
 	/* run the klc-3 main test */
