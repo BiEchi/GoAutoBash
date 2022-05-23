@@ -120,7 +120,7 @@ func ExecuteTask(task *Task) error {
 	/* allow the container to write to the host machine */
 	execCommand(dir, "chmod", "0777", "report")
 	/* run the klc-3 regression test */
-	if MPExists("report"+"/"+task.Payload.Pusher.Name, numMP) {
+	if MPExists("report"+"/"+task.Payload.Pusher.Name, numMP, dir) {
 		/* mkdir the regression dir */
 		execCommand(dir, "mkdir", "report/regression")
 		/* make a copy of the regression testcases to the report/regression dir */
@@ -234,14 +234,14 @@ func append(filename string, content string) error {
 }
 
 /* check if there exists a file "MP..." in the directory dir */
-func MPExists(dir string, numMP string) bool {
+func MPExists(dir string, numMP string, exclude string) bool {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		logrus.Error(err)
 		return false
 	}
 	for _, f := range files {
-		if strings.HasPrefix(f.Name(), "MP"+numMP) {
+		if strings.HasPrefix(f.Name(), "MP"+numMP) && f.Name() != exclude {
 			return true
 		}
 	}
