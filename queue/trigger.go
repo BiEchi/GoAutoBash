@@ -121,6 +121,11 @@ func ExecuteTask(task *Task) error {
 	execCommand(dir, "chmod", "0777", "report")
 	/* run the klc-3 regression test */
 	if MPExists("report"+"/"+task.Payload.Pusher.Name, numMP) {
+		/* mkdir the regression dir */
+		execCommand(dir, "mkdir", "report/regression")
+		/* make a copy of the regression testcases to the report/regression dir */
+		execCommand(dir, "cp", "report/student.asm", "report/regression/student.asm")
+		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
 		/* we have previous run history, add the commits to list regTestList */
 		var regTest string
 		f_dirs, _ := ioutil.ReadDir(dir)
@@ -133,9 +138,8 @@ func ExecuteTask(task *Task) error {
 					dir+"/report/regression/"+f_dir.Name())
 			}
 		}
-		/* make a copy of the regression testcases to the report/regression dir */
-		execCommand(dir, "cp", "report/student.asm", "report/regression/student.asm")
-		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
+		/* allow the container to write to the host machine */
+		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
 		execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
 			"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false",
