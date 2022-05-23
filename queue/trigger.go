@@ -130,7 +130,8 @@ func ExecuteTask(task *Task) error {
 		var regTest string
 		fDirs, _ := ioutil.ReadDir("report" + "/" + task.Payload.Pusher.Name)
 		for _, fDir := range fDirs {
-			if strings.HasPrefix(fDir.Name(), "MP"+numMP) {
+			/* add to regression test when has prefix but not this dir */
+			if strings.HasPrefix(fDir.Name(), "MP"+numMP) && fDir.Name() != "MP"+numMP+"_"+commitId+"_"+dt.Format("01-02_15-04-05") {
 				/* add the dir to list regTestList */
 				regTest += " report/regression/" + fDir.Name() + ".asm"
 				/* copy the testcase files to dir/report */
@@ -138,7 +139,7 @@ func ExecuteTask(task *Task) error {
 					dir+"/report/regression/"+fDir.Name()+".asm")
 			}
 		}
-		print(regTest)
+		println(regTest)
 		/* allow the container to write to the host machine */
 		execCommand(dir, "chmod", "0777", "report/regression")
 		/* run the regression test on all previous testcases */
