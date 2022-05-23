@@ -151,13 +151,12 @@ func ExecuteTask(task *Task) error {
 
 		for _, regTest := range regTestList {
 			println(regTest)
-			/* run the regression test */
+			/* BUG: run the regression test */
 			execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
 				"klc3" /*"--test=report/regression/student.asm", "--gold=report/regression/gold.asm",*/, "--use-forked-solver=false",
 				"--copy-additional-file=report/regression/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
 				regTest, "report/regression/gold.asm")
 		}
-
 		execCommand(dir, "rm", "report/regression/gold.asm")
 		execCommand(dir, "rm", "report/regression/student.asm")
 	}
