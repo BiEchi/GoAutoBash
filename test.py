@@ -136,9 +136,9 @@ def run_concrete_test(student_filename: str, input_data_list: List[str], case_na
     # Output directly to the output path, while the test subdirectory is named differently
     run_test(
         student_filename=student_filename,
-        input_data_list=input_data_list,
+        input_data_list=input_data_list, #
         case_start_index=0,
-        concrete_case_name=case_name,
+        concrete_case_name=case_name, #
         output_dir=root_output_dir,
         entry_file=entry_file,
         gold_program=gold_program,

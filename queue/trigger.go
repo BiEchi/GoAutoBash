@@ -3,8 +3,10 @@ package queue
 import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/go-playground/webhooks.v5/github"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -117,8 +119,33 @@ func ExecuteTask(task *Task) error {
 
 	/* allow the container to write to the host machine */
 	execCommand(dir, "chmod", "0777", "report")
-	/* run the docker container */
-	// execCommand(".", "python3", "mp"+numMP+".py", "-d="+dir)
+	/* run the klc-3 regression test */
+	if MPExists("report"+"/"+task.Payload.Pusher.Name, numMP) {
+		/* we have previous run history, add the commits to list regTestList */
+		regTestList := []string{}
+		f_dirs, _ := ioutil.ReadDir(dir)
+		for _, f_dir := range f_dirs {
+			if strings.HasPrefix(f_dir.Name(), "MP"+numMP) {
+				/* append the dir name to list regTestList */
+				regTestList = append(regTestList, "report/regression/"+f_dir.Name())
+				/* copy the testcase files to dir/report */
+				execCommand(".", "cp", "report/"+task.Payload.Pusher.Name+"/"+f_dir.Name()+"/report/klc3-out-0/test0/test0-test_data.asm",
+					dir+"/report/regression/"+f_dir.Name())
+			}
+		}
+		/* concat the list to a string */
+		regTestListStr := strings.Join(regTestList, " ")
+		/* make a copy of the regression testcases to the report/regression dir */
+		execCommand(dir, "cp", "report/student.asm", "report/regression/student.asm")
+		execCommand(dir, "cp", "report/gold.asm", "report/regression/gold.asm")
+		/* run the regression test on all previous testcases */
+		execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report/regression:/home/klee/report/regression:Z", "liuzikai/klc3",
+			"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false",
+			"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
+			regTestListStr)
+	}
+
+	/* run the klc-3 main test */
 	execCommand(".", "docker", "run", "-P", "-v=/root/GoAutoBash/"+dir+"/report:/home/klee/report:Z", "liuzikai/klc3",
 		"klc3", "--test=report/student.asm", "--gold=report/gold.asm", "--use-forked-solver=false",
 		"--copy-additional-file=report/replay.sh", "--max-lc3-step-count=200000", "--max-lc3-out-length=1100",
@@ -200,4 +227,19 @@ func append(filename string, content string) error {
 		panic(err)
 	}
 	return nil
+}
+
+/* check if there exists a file "MP..." in the directory dir */
+func MPExists(dir string, numMP string) bool {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		logrus.Error(err)
+		return false
+	}
+	for _, f := range files {
+		if strings.HasPrefix(f.Name(), "MP"+numMP) {
+			return true
+		}
+	}
+	return false
 }
